@@ -1,0 +1,59 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+struct Task {
+    std::string name;
+    bool completed;
+};
+
+class TaskManager {
+    std::vector<Task> tasks;
+
+public:
+    void addTask(const std::string &name) {
+        tasks.push_back(Task{name, false});
+    }
+
+    void viewTasks() const {
+        for (const auto &task : tasks) {
+            std::cout << (task.completed ? "[x] " : "[ ] ") << task.name << std::endl;
+        }
+    }
+
+    void markTaskAsCompleted(const std::string &name) {
+        auto it = std::find_if(tasks.begin(), tasks.end(), [&](const Task &task) { return task.name == name; });
+        if (it != tasks.end()) {
+            it->completed = true;
+        }
+    }
+
+    void removeTask(const std::string &name) {
+        tasks.erase(std::remove_if(tasks.begin(), tasks.end(), [&](const Task &task) { return task.name == name; }), tasks.end());
+    }
+};
+
+int main() {
+    TaskManager manager;
+    std::string input;
+
+    while (true) {
+        std::cout << "1. Add Task" << std::endl;
+        std::cout << "2. View Tasks" << std::endl;
+        std::cout << "3. Mark Task as Completed" << std::endl;
+        std::cout << "4. Remove Task" << std::endl;
+        std::cout << "5. Exit" << std::endl;
+
+        std::cout << "Enter your choice: ";
+        std::cin >> input;
+
+        if (input == "1") {
+            std::string task_name;
+            std::cout << "Enter task name: ";
+            std::cin >> task_name;
+            manager.addTask(task_name);
+        } else if (input == "2") {
+            manager.viewTasks();
+        } else if (input == "3") {
+            std::string task_name;
+            std::cout << "Enter
